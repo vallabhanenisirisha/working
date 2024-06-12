@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: python-container
+        image: sirisha17/python:v1       
+        ports:
+         - containerPort: 8080
+        resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "500m"
+              memory: "500Mi"
+        volumeMounts:
+          - name: data-volume
+            mountPath: /tmp
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: my-pvc
